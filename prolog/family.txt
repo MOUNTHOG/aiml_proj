@@ -1,0 +1,45 @@
+father(abbas, zainulabedin).
+mother(khads, zainulabedin).
+father(zainulabedin, arwa).
+mother(jumana, arwa).
+mother(farida, fatema).
+mother(rashida, duriya).
+mother(tasneem, khadija).
+sibling(husena, arwa).
+sibling(farida, zainulabedin).
+sibling(tasneem, zainulabedin).
+sibling(rashida, zainulabedin).
+sibling(fats, duriya).
+sibling(tas, fatema).
+% Gender facts
+male(abbas).
+male(zainulabedin).
+female(khads).
+female(jumana).
+female(arwa).
+female(husena).
+female(farida).
+female(rashida).
+female(tasneem).
+female(fatema).
+female(duriya).
+female(khadija).
+female(fats).
+female(tas).
+% Rules
+% parent is either father or mother
+parent(X, Y) :- father(X, Y).
+parent(X, Y) :- mother(X, Y).
+% siblings share at least one parent
+sibling(X, Y) :-
+parent(P, X),
+parent(P, Y),
+X \= Y.
+% brother if male sibling
+brother(X, Y) :-
+sibling(X, Y),
+male(X).
+% sister if female sibling
+sister(X, Y) :-
+sibling(X, Y),
+female(X).

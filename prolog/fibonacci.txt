@@ -1,0 +1,26 @@
+fib_series(0, []).
+fib_series(1, [0]).
+fib_series(N, Series) :-
+    N > 1,
+    fib_series_helper(N, 0, 1, [0], Series).
+
+fib_series_helper(1, _, _, Series, Series).
+fib_series_helper(N, A, B, Acc, Series) :-
+    N > 1,
+    Next is A + B,
+    append(Acc, [B], NewAcc),
+    N1 is N - 1,
+    fib_series_helper(N1, B, Next, NewAcc, Series).
+
+fib(0, 0).
+fib(1, 1).
+fib(N, F) :-
+    N > 1,
+    N1 is N - 1,
+    N2 is N - 2,
+    fib(N1, F1),
+    fib(N2, F2),
+    F is F1 + F2.
+
+%fib(6, F). gives 6th number
+%fib_series(10, S). gives array of 10 numbers

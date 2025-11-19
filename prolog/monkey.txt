@@ -1,0 +1,55 @@
+% monkey_banana_logic.pl
+% Logical solver (not hardcoded) that finds a plan to get the banana.
+% State: state(MonkeyPos, BoxPos, BananaPos, HasBananaFlag).
+% HasBananaFlag: no | yes
+
+% initial state
+initial_state(state(right, left, middle, no)).
+
+% goal state: monkey has banana
+goal_state(state(_, _, _, yes)).
+
+% adjacency
+adjacent(left, middle).
+adjacent(middle, left).
+adjacent(middle, right).
+adjacent(right, middle).
+
+% ACTIONS
+% move(M->To): monkey walks to To (box stays)
+action(state(M,B,Ban,Has), move(M,To), state(To,B,Ban,Has)) :-
+    adjacent(M, To).
+
+% push(M->To): monkey pushes box from M to To (monkey and box move together)
+action(state(M,B,Ban,Has), push(M,To), state(To,To,Ban,Has)) :-
+    M = B,                % monkey must be at same position as box to push
+    adjacent(M, To).
+
+% climb_and_grab: monkey climbs box and grabs banana in single combined action
+% This action succeeds only if box (and monkey) are at banana's position.
+action(state(P,P,Ban,no), climb_and_grab, state(P,P,Ban,yes)) :-
+    P = Ban.
+
+% DFS search with visited check to avoid cycles
+solve(Plan) :-
+    initial_state(Init),
+    dfs(Init, [Init], Plan).
+
+dfs(State, _, []) :-
+    goal_state(State).
+
+dfs(State, Visited, [Act|Rest]) :-
+    action(State, Act, NewState),
+    \+ member(NewState, Visited),
+    dfs(NewState, [NewState|Visited], Rest).
+
+% helper to print plan nicely (optional)
+print_plan(Plan) :-
+    write(Plan), nl.
+
+%solve(Plan). --to run
+%action(state(left,left,middle,no), move(left,middle), S).
+%initial_state(S), dfs(S, [S], Plan).
+
+%fib_series(10, S)
+%fib(12, F).      
