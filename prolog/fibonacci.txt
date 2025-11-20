@@ -22,5 +22,39 @@ fib(N, F) :-
     fib(N2, F2),
     F is F1 + F2.
 
+
+% -------------------------------
+% Tail-recursive Fibonacci number
+% -------------------------------
+
+fib(N, F) :-
+    fib_helper(N, 0, 1, F).
+
+fib_helper(0, A, _, A).          % F(0) = 0
+fib_helper(N, A, B, F) :-
+    N > 0,
+    N1 is N - 1,
+    Next is A + B,
+    fib_helper(N1, B, Next, F).
+
+
+% ----------------------------------
+% Tail-recursive Fibonacci series
+% ----------------------------------
+
+fib_series(N, Series) :-
+    fib_series_helper(N, 0, 1, [0], Rev),
+    reverse(Rev, Series).
+
+fib_series_helper(1, _, _, Acc, Acc).        % When N = 1, done
+
+fib_series_helper(N, A, B, Acc, Series) :-
+    N > 1,
+    Next is A + B,
+    N1 is N - 1,
+    fib_series_helper(N1, B, Next, [B | Acc], Series).
+
+%time(fib(6, F)
+
 %fib(6, F). gives 6th number
 %fib_series(10, S). gives array of 10 numbers
